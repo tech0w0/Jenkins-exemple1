@@ -10,5 +10,10 @@ pipeline {
                sh 'go build'
            }
        }
+       stage('Deploy'){
+       	   steps {
+	       archiveArtifacts artifacts: '*.go'
+           }
+       }	
     }
 }
