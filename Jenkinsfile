@@ -13,8 +13,7 @@ pipeline {
        }
        stage('Publish artifact') {
           steps {
-            archiveArtifacts 'example1'
-          }
+            archiveArtifacts 'Jenkins-example1' }
        }
     }
 }
