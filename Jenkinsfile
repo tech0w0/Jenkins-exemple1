@@ -1,19 +1,30 @@
 pipeline {
-    agent any
+    agent {dockerfile: true}
 
     tools {
      go { 'go-1.14' }
     }
 
     stages {
-       stage('Build') {
+       stage('Copy artifact') {
           steps {
-            sh 'go build'
+             copyArtifacts filter: 'example1', fingerprintArtifacts: true, projectName: 'example1', selector: lastSuccessful()
           }
        }
-       stage('Publish artifact') {
+
+       stage('Build docker image') {
+	  steps {
+	     sh 'docker build -t csagan/example1:latest .'
+          }
+       }
+  
+       stage('Push docker image') {
           steps {
-            archiveArtifacts 'main' }
+ 	     withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'password', usernameVariable: 'user')]) {
+    		sh "docker login -u ${user} -p ${password}"
+	     }
+             sh 'docker push csagan/example1:latest'
+	  }
        }
     }
 }

@@ -6,12 +6,12 @@ pipeline {
         XDG_CACHE_HOME = '/tmp/.cache'
       }
       steps {
-        sh 'go build -o main'
+        sh 'go build -o example1'
       }
     }
     stage ('Save artifact') {
       steps {
-        archiveArtifacts 'main'
+        archiveArtifacts 'example1'
       }
     }
   }
